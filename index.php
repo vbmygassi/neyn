@@ -5,7 +5,7 @@
 		der router ist dann 
 		[host|/[name der route]/test.php
 		! nee!
-		noch viel, viel, viel Besser...
+		noch viel, viel, viel besser...
 		ich habe noch EINE VIEL BESSERE IDEE...
 		[host|/[name der route]/index.php 
 		also
@@ -50,9 +50,10 @@ function bind($index, $method)
 	if(!array_key_exists($index, $dreck)){
 		$dreck[$index] = array();
 	}
-	if(!in_array($method, $dreck[$index])){
-		$dreck[$index][] = $method;
+	if(in_array($method, $dreck[$index])){
+		return false;
 	}
+	$dreck[$index][] = $method;
 	return true;
 }
 
@@ -82,27 +83,38 @@ function call($index, $message)
 	return true;
 }
 
-bind("some_event", "some_method");
-bind("some_event", "some_method");
-bind("some_event", "some_method");
-bind("some_event", "some_method");
-bind("some_event", "anyy_method");
+bind("init", "some_method");
+bind("init", "some_method");
+bind("init", "some_method");
+bind("init", "some_method");
+bind("init", "anyy_method");
+
 bind("anyy_event", "some_method");
 bind("anyy_event", "no_such_met");
 bind("some_event", "drecks_method");
+
 bind("drecks_method_is_done", "some_method");
 
-dnib("some_event", "some_method");
+// dnib("some_event", "some_method");
  
-call("some_event", 
+call("init", 
 	array(
 		"created"=>microtime(), 
+		"type"=>"immer_feste_auf_die_nase",
 		"wasweis"=>100, 
 		"ichwasi"=>999,
 		"wasiwes"=>101
 	)
 );
-call("anyy_event", array("created"=>microtime()));
+call("anyy_event", 
+	array(
+		"created"=>microtime(),
+		"type"=>"sagt das auge zum bein",
+		"x"=>"ich gehe dann mal,",
+		"y"=>"sagt das bein zum auge,",
+		"z"=>"das will ich aber sehen"
+	)
+);
 call("kaka_event", array("created"=>microtime()));
 
 
