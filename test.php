@@ -4,6 +4,13 @@
 		da kann man alles reinschreiben dann
 		der router ist dann 
 		[host|/[name der route]/test.php
+		! nee!
+		noch viel, viel, viel Besser...
+		ich habe noch EINE VIEL BESSERE IDEE...
+		[host|/[name der route]/index.php 
+		also
+		[host|/[name der route]/
+		skrass 
 	*/
 
 $drick = array(
