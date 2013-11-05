@@ -2,6 +2,7 @@
 /*
 	?? so wäre es am [aller]besten gewesen 
 	*/
+
 $drick = array(
 	"anyy_method"=>function($message){ 
 		print "anyy_method()\n";
@@ -24,6 +25,7 @@ $drick = array(
 );
 
 $dreck = array();
+$model = array();
 
 function bind($index, $method)
 {
@@ -47,7 +49,8 @@ function dnib($index, $method)
 	return true;
 }
 
-function call($index, $message){
+function call($index, $message)
+{
 	global $drick;
 	global $dreck;
 	if(!array_key_exists($index, $dreck)){
@@ -74,6 +77,14 @@ bind("drecks_method_is_done", "some_method");
 
 dnib("some_event", "some_method");
  
-call("some_event", array("created"=>microtime()));
+call("some_event", 
+	array(
+		"created"=>microtime(), 
+		"wasweis"=>100, 
+		"ichwasi"=>999,
+		"wasiwes"=>101
+	)
+);
 call("anyy_event", array("created"=>microtime()));
 call("kaka_event", array("created"=>microtime()));
+
