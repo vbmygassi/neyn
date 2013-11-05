@@ -1,24 +1,34 @@
 <?php
 /*
 	?? so wäre es am [aller]besten gewesen 
+		da kann man alles reinschreiben dann
+		der router ist dann 
+		[host|/[name der route]/test.php
 	*/
 
 $drick = array(
 	"anyy_method"=>function($message){ 
+		global $model;
 		print "anyy_method()\n";
 		print_r($message);
+		$model["record"] = "109";
 		call("anyy_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
 	"some_method"=>function($message){
+		global $model;
 		print "some_method()\n";
 		print_r($message);
+		$model["gehtnicht"] = "abc";;
 		call("some_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
 	"drecks_method"=>function($message){
+		global $model;
 		print "drecks_method()\n";
 		print_r($message);
+		print_r($model);
+		$model["neyn"] = "-:-";;
 		call("drecks_method_is_done", array("created"=>microtime()));
 		return true;
 	}
@@ -87,4 +97,5 @@ call("some_event",
 );
 call("anyy_event", array("created"=>microtime()));
 call("kaka_event", array("created"=>microtime()));
+
 
