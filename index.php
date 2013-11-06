@@ -21,40 +21,59 @@ $command = array(
 		$model["test1"] = "109";
 		$model["test2"] = "Mühsam nährt sich das Eichhörnchen";
 		include("view/nicknack.php");
-		call("anyy_method_is_done", array("created"=>microtime()));
+		call("render_is_done", array("time"=>microtime()));
 		return true; 
 	},
+
+	"renderror"=>function($message){
+		include("view/error.php");
+		return true;
+	},
 	
-	"setup_db"=>function($message){
+	"setup_loggar_db"=>function($message){
+		$db = null;
 		try{
-			$db = new SQLite3(dirname(__file__) . "/db/loggar.db");
+			$db = new SQLite3(dirname(__file__) . "/db/loggar");
 		}
 		catch(Exception $e){
-			call("setup_db_failed", 
+			call("setup_loggar_db_failed", 
 				array(
-					"created"=>microtime(),
-					"message"=>$e->getMessage()
+					"time"=>microtime(),
+					"message"=>$e->getMessage(),
 				)
 			);
+			return false;
 		}
 		$sql = "CREATE TABLE IF NOT EXISTS loggar (
-				id INTEGER NOT NULL, 
-				date VARCHAR(128), 
-				log TEXT, 
-				PRIMARY KEY(id)
-			);";
+			id INTEGER NOT NULL, 
+			date VARCHAR(128), 
+			log TEXT, 
+			PRIMARY KEY(id)
+		);";
 		if(!($db->exec($sql))){
-			call("setup_db_failed", array("created"=>microtime()));
+			call("setup_loggar_db_failed", 
+				array(	
+					"time"=>microtime(),
+					"message"=>"could not write table",
+					"sql"=>$sql
+				)
+			);
 			return false;
 		}
 		$temp = serialize($message);
 		$stmp = date("U");
 		$sql = "INSERT INTO loggar (date, log) VALUES('$stmp', '$temp')";
 		if(!($q = $db->query($sql))){
-			call("setup_db_failed", array("created"=>microtime()));
+			call("setup_loggar_db_failed", 
+				array(
+					"time"=>microtime(),
+					"message"=>"no insert",
+					"sql"=>$sql
+				)
+			);
 			return false;
 		}
-		call("setup_db_is_done", array("created"=>microtime()));
+		call("setup_loggar_db_is_done", array("time"=>microtime()));
 		return true; 
 	}
 );
@@ -101,17 +120,18 @@ function call($index, $message)
 	return true;
 }
 
-bind("init", "setup_db");
-bind("setup_db_is_done", "render");
+bind("init", "setup_loggar_db");
+bind("setup_loggar_db_failed", "renderror");
+bind("setup_loggar_db_is_done", "render");
+
+// call("setup_loggar_db_failed", array());
 
 call("init", 
 	array(
-		"created"=>microtime(), 
 		"type"=>"immer_feste_auf_die_nase",
 		"wasweis"=>100, 
 		"ichwasi"=>999,
 		"wasiwes"=>101
 	)
 );
-
 
