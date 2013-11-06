@@ -2,19 +2,14 @@
 
 print <<<EOD
 <html>
+	<head>
+		<meta charset="utf-8"/>
+		<title></title>
+	</head>
+	<body>
+		<pre>
 
-<head>
-
-<meta charset="utf-8"/>
-
-<title></title>
-
-</head>
-
-<body>
-
-<pre>
-
+>>:::. .................................................
 
 	..:::::::::::::
 	:::: {$model["gehtnicht"]}
@@ -22,10 +17,10 @@ print <<<EOD
 	:: {$model["record"]}
 	...	
 	...............
-</pre>
 
-</body>
-
+		
+		</pre>
+	</body>
 </html>
 
 EOD;
