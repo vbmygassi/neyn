@@ -135,16 +135,13 @@ function notify($index, $message)
 bind("init", "setup_loggar_db");
 bind("setup_loggar_db_failed", "renderror");
 bind("setup_loggar_db_is_done", "nokkedli");
+bind("nokkedli_failed", "renderror");
 bind("nokkedli_is_done", "render");
-
-// notify("setup_loggar_db_failed", array());
 
 notify("init", 
 	array(
-		"type"=>"immer_feste_auf_die_nase",
-		"wasweis"=>100, 
-		"ichwasi"=>999,
-		"wasiwes"=>101
+		"type"=>"was tun, wenn der bär kommt...",
+		"message"=>"immer kräftig auf die nase schlagen..."
 	)
 );
 
