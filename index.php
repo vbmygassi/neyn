@@ -91,14 +91,12 @@ $commis = array(
 
 	"hach, wer will das noch lesen.."=>function($message){
 		// social, message driven rapid app prototyping 
-		$message["owner"] = array();
-		$message["owner"]["kostenstelle"] = "696";
-		$message["owner"]["avatar"] = "gesicht.png";
-		$message["owner"]["telephon"] = "01 90 68 68 56";
-		$message["owner"]["about"] = "Ich bin gerne Fahrradkurier gewesen...";
-		$message["owner"]["hint"] = "Blue Öyster Cult hiess mal...";
-		$message["owner"]["answer"] = "Soft White Underbelly";
-	},
+		$message["owner"] = array(
+			"kostenstelle"=>696,
+			"avatar"=>"gesicht.png",
+			"about"=>"Meine Mutter Hausfrau, der Vater Taxifahrer..."
+		);
+	}
 );
 
 $sched = array();
