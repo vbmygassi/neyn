@@ -14,14 +14,17 @@
 	*/
 
 $drick = array(
+	
 	"anyy_method"=>function($message){ 
 		global $model;
 		print "anyy_method()\n";
 		print_r($message);
 		$model["record"] = "109";
+		include("view/nicknack.php");
 		call("anyy_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
+	
 	"some_method"=>function($message){
 		global $model;
 		print "some_method()\n";
@@ -30,6 +33,7 @@ $drick = array(
 		call("some_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
+	
 	"drecks_method"=>function($message){
 		global $model;
 		print "drecks_method()\n";
@@ -88,14 +92,12 @@ bind("init", "some_method");
 bind("init", "some_method");
 bind("init", "some_method");
 bind("init", "anyy_method");
-
 bind("anyy_event", "some_method");
 bind("anyy_event", "no_such_met");
 bind("some_event", "drecks_method");
-
 bind("drecks_method_is_done", "some_method");
 
-// dnib("some_event", "some_method");
+dnib("some_event", "some_method");
  
 call("init", 
 	array(
@@ -106,6 +108,7 @@ call("init",
 		"wasiwes"=>101
 	)
 );
+
 call("anyy_event", 
 	array(
 		"created"=>microtime(),
@@ -115,6 +118,6 @@ call("anyy_event",
 		"z"=>"das will ich aber sehen"
 	)
 );
-call("kaka_event", array("created"=>microtime()));
 
+call("kaka_event", array("created"=>microtime()));
 
