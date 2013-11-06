@@ -68,7 +68,7 @@ $commis = array(
 	"nokkedli"=>function($message){	
 		global $model;
 		if(null == $model["db"]){
-			notify("error_no_logger_db", array("time"=>microtime()));
+			notify("error_no_loggar_db", array("time"=>microtime()));
 			return false;
 		}
 		$seri = serialize($message);
@@ -87,7 +87,18 @@ $commis = array(
 		}
 		notify("nokkedli_is_done", array("time"=>microtime()));
 		return true; 
-	}
+	},
+
+	"hach, wer will das noch lesen.."=>function($message){
+		// social, message driven rapid app prototyping 
+		$message["owner"] = array();
+		$message["owner"]["kostenstelle"] = "696";
+		$message["owner"]["avatar"] = "gesicht.png";
+		$message["owner"]["telephon"] = "01 90 68 68 56";
+		$message["owner"]["about"] = "Ich bin gerne Fahrradkurier gewesen...";
+		$message["owner"]["hint"] = "Blue Öyster Cult hiess mal...";
+		$message["owner"]["answer"] = "Soft White Underbelly";
+	},
 );
 
 $sched = array();
@@ -136,6 +147,7 @@ bind("init", "setup_loggar_db");
 bind("setup_loggar_db_failed", "renderror");
 bind("setup_loggar_db_is_done", "nokkedli");
 bind("nokkedli_failed", "renderror");
+bind("no_loggar_db", "renderror");
 bind("nokkedli_is_done", "render");
 
 notify("init", 
