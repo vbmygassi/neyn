@@ -1,4 +1,4 @@
-<?php
+<?php date_default_timezone_set("Europe/Berlin");
 /*
 	?? so wäre es am [aller]besten gewesen 
 		da kann man alles reinschreiben dann
@@ -15,50 +15,36 @@
 
 $drick = array(
 	
-	"anyy_method"=>function($message){ 
+	"render"=>function($message){ 
 		global $model;
-		// print "anyy_method()\n";
-		// print_r($message);
-		$model["record"] = "109";
+		$model["test1"] = "109";
+		$model["test2"] = "Mühsam nährt sich das Eichhörnchen";
 		include("view/nicknack.php");
 		call("anyy_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
 	
-	"some_method"=>function($message){
-		global $model;
-		// writes db
-		date_default_timezone_set("Europe/Berlin");
+	"setup_db"=>function($message){
 		$db = new SQLite3("loggar.db");
 		$sql = "CREATE TABLE IF NOT EXISTS loggar (
 				id INTEGER NOT NULL, 
 				date VARCHAR(128), 
-				doc TEXT, 
+				log TEXT, 
 				PRIMARY KEY(id)
 			);";
 		if(!($db->exec($sql))){
+			call("setup_db_failed", array("created"=>microtime()));
 			return false;
 		}
-		$stamp = date("U");
 		$temp = serialize($message);
-		$sql = "INSERT INTO loggar (date, doc) VALUES('$stamp', '$temp')";
+		$stmp = date("U");
+		$sql = "INSERT INTO loggar (date, log) VALUES('$stmp', '$temp')";
 		if(!($q = $db->query($sql))){
+			call("setup_db_failed", array("created"=>microtime()));
 			return false;
 		}
-		// 
-		$model["gehtnicht"] = "abc";
-		call("some_method_is_done", array("created"=>microtime()));
+		call("setup_db_is_done", array("created"=>microtime()));
 		return true; 
-	},
-	
-	"drecks_method"=>function($message){
-		global $model;
-		// print "drecks_method()\n";
-		// print_r($message);
-		// print_r($model);
-		$model["neyn"] = "-:-";;
-		call("drecks_method_is_done", array("created"=>microtime()));
-		return true;
 	}
 );
 
@@ -104,18 +90,9 @@ function call($index, $message)
 	return true;
 }
 
-bind("init", "some_method");
-bind("init", "some_method");
-bind("init", "some_method");
-bind("init", "some_method");
-bind("init", "anyy_method");
-bind("anyy_event", "some_method");
-bind("anyy_event", "no_such_met");
-bind("some_event", "drecks_method");
-bind("drecks_method_is_done", "some_method");
+bind("init", "setup_db");
+bind("setup_db_is_done", "render");
 
-dnib("some_event", "some_method");
- 
 call("init", 
 	array(
 		"created"=>microtime(), 
@@ -126,15 +103,4 @@ call("init",
 	)
 );
 
-call("anyy_event", 
-	array(
-		"created"=>microtime(),
-		"type"=>"sagt das auge zum bein",
-		"x"=>"ich gehe dann mal,",
-		"y"=>"sagt das bein zum auge,",
-		"z"=>"das will ich aber sehen"
-	)
-);
-
-call("kaka_event", array("created"=>microtime()));
 
