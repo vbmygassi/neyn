@@ -17,8 +17,8 @@ $drick = array(
 	
 	"anyy_method"=>function($message){ 
 		global $model;
-		print "anyy_method()\n";
-		print_r($message);
+		// print "anyy_method()\n";
+		// print_r($message);
 		$model["record"] = "109";
 		include("view/nicknack.php");
 		call("anyy_method_is_done", array("created"=>microtime()));
@@ -27,8 +27,8 @@ $drick = array(
 	
 	"some_method"=>function($message){
 		global $model;
-		print "some_method()\n";
-		print_r($message);
+		// print "some_method()\n";
+		// print_r($message);
 		$model["gehtnicht"] = "abc";;
 		call("some_method_is_done", array("created"=>microtime()));
 		return true; 
@@ -36,9 +36,9 @@ $drick = array(
 	
 	"drecks_method"=>function($message){
 		global $model;
-		print "drecks_method()\n";
-		print_r($message);
-		print_r($model);
+		// print "drecks_method()\n";
+		// print_r($message);
+		// print_r($model);
 		$model["neyn"] = "-:-";;
 		call("drecks_method_is_done", array("created"=>microtime()));
 		return true;
