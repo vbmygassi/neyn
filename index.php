@@ -14,14 +14,14 @@
 		skrass 
 	*/
 
-$command = array(
+$commis = array(
 	
 	"render"=>function($message){ 
 		global $model;
 		$model["test1"] = "109";
 		$model["test2"] = "Mühsam nährt sich das Eichhörnchen";
 		include("view/nicknack.php");
-		call("render_is_done", array("time"=>microtime()));
+		notify("render_is_done", array("time"=>microtime()));
 		return true; 
 	},
 
@@ -31,12 +31,12 @@ $command = array(
 	},
 	
 	"setup_loggar_db"=>function($message){
-		$db = null;
+		global $model;
 		try{
-			$db = new SQLite3(dirname(__file__) . "/db/loggar");
+			$model["db"] = new SQLite3(dirname(__file__) . "/db/loggar");
 		}
 		catch(Exception $e){
-			call("setup_loggar_db_failed", 
+			notify("setup_loggar_db_failed", 
 				array(
 					"time"=>microtime(),
 					"message"=>$e->getMessage(),
@@ -47,11 +47,12 @@ $command = array(
 		$sql = "CREATE TABLE IF NOT EXISTS loggar (
 			id INTEGER NOT NULL, 
 			date VARCHAR(128), 
-			log TEXT, 
+			seri TEXT, 
+			json TEXT, 
 			PRIMARY KEY(id)
 		);";
-		if(!($db->exec($sql))){
-			call("setup_loggar_db_failed", 
+		if(!($model["db"]->exec($sql))){
+			notify("setup_loggar_db_failed", 
 				array(	
 					"time"=>microtime(),
 					"message"=>"could not write table",
@@ -60,11 +61,22 @@ $command = array(
 			);
 			return false;
 		}
-		$temp = serialize($message);
+		notify("setup_loggar_db_is_done", array("time"=>microtime()));
+		return true;
+	},
+
+	"nokkedli"=>function($message){	
+		global $model;
+		if(null == $model["db"]){
+			notify("error_no_logger_db", array("time"=>microtime()));
+			return false;
+		}
+		$seri = serialize($message);
+		$json = json_encode($message);
 		$stmp = date("U");
-		$sql = "INSERT INTO loggar (date, log) VALUES('$stmp', '$temp')";
-		if(!($q = $db->query($sql))){
-			call("setup_loggar_db_failed", 
+		$sql = "INSERT INTO loggar (date, seri, json) VALUES('$stmp', '$seri', '$json')";
+		if(!($q = $model["db"]->query($sql))){
+			notify("nokkedli_failed", 
 				array(
 					"time"=>microtime(),
 					"message"=>"no insert",
@@ -73,7 +85,7 @@ $command = array(
 			);
 			return false;
 		}
-		call("setup_loggar_db_is_done", array("time"=>microtime()));
+		notify("nokkedli_is_done", array("time"=>microtime()));
 		return true; 
 	}
 );
@@ -104,29 +116,30 @@ function dnib($index, $method)
 	return true;
 }
 
-function call($index, $message)
+function notify($index, $message)
 {
-	global $command;
+	global $commis;
 	global $sched;
 	if(!array_key_exists($index, $sched)){
 		return false;
 	}	
 	foreach($sched[$index] as $m){
-		if(!array_key_exists($m, $command)){
+		if(!array_key_exists($m, $commis)){
 			continue;
 		}
-		$command[$m]($message);
+		$commis[$m]($message);
 	}
 	return true;
 }
 
 bind("init", "setup_loggar_db");
 bind("setup_loggar_db_failed", "renderror");
-bind("setup_loggar_db_is_done", "render");
+bind("setup_loggar_db_is_done", "nokkedli");
+bind("nokkedli_is_done", "render");
 
-// call("setup_loggar_db_failed", array());
+// notify("setup_loggar_db_failed", array());
 
-call("init", 
+notify("init", 
 	array(
 		"type"=>"immer_feste_auf_die_nase",
 		"wasweis"=>100, 
