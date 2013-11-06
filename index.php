@@ -1,4 +1,5 @@
 <?php date_default_timezone_set("Europe/Berlin");
+
 /*
 	?? so wäre es am [aller]besten gewesen 
 		da kann man alles reinschreiben dann
@@ -13,7 +14,7 @@
 		skrass 
 	*/
 
-$drick = array(
+$command = array(
 	
 	"render"=>function($message){ 
 		global $model;
@@ -48,44 +49,44 @@ $drick = array(
 	}
 );
 
-$dreck = array();
+$sched = array();
 $model = array();
 
 function bind($index, $method)
 {
-	global $dreck;
-	if(!array_key_exists($index, $dreck)){
-		$dreck[$index] = array();
+	global $sched;
+	if(!array_key_exists($index, $sched)){
+		$sched[$index] = array();
 	}
-	if(in_array($method, $dreck[$index])){
+	if(in_array($method, $sched[$index])){
 		return false;
 	}
-	$dreck[$index][] = $method;
+	$sched[$index][] = $method;
 	return true;
 }
 
 function dnib($index, $method)
 {
-	global $dreck;
-	if(!array_key_exists($index, $dreck)){
+	global $sched;
+	if(!array_key_exists($index, $sched)){
 		return false;
 	}
-	$dreck[$index] = array_diff($dreck[$index], array($method));
+	$sched[$index] = array_diff($sched[$index], array($method));
 	return true;
 }
 
 function call($index, $message)
 {
-	global $drick;
-	global $dreck;
-	if(!array_key_exists($index, $dreck)){
+	global $command;
+	global $sched;
+	if(!array_key_exists($index, $sched)){
 		return false;
 	}	
-	foreach($dreck[$index] as $m){
-		if(!array_key_exists($m, $drick)){
+	foreach($sched[$index] as $m){
+		if(!array_key_exists($m, $command)){
 			continue;
 		}
-		$drick[$m]($message);
+		$command[$m]($message);
 	}
 	return true;
 }
