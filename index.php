@@ -27,9 +27,26 @@ $drick = array(
 	
 	"some_method"=>function($message){
 		global $model;
-		// print "some_method()\n";
-		// print_r($message);
-		$model["gehtnicht"] = "abc";;
+		// writes db
+		date_default_timezone_set("Europe/Berlin");
+		$db = new SQLite3("loggar.db");
+		$sql = "CREATE TABLE IF NOT EXISTS loggar (
+				id INTEGER NOT NULL, 
+				date VARCHAR(128), 
+				doc TEXT, 
+				PRIMARY KEY(id)
+			);";
+		if(!($db->exec($sql))){
+			return false;
+		}
+		$stamp = date("U");
+		$temp = serialize($message);
+		$sql = "INSERT INTO loggar (date, doc) VALUES('$stamp', '$temp')";
+		if(!($q = $db->query($sql))){
+			return false;
+		}
+		// 
+		$model["gehtnicht"] = "abc";
 		call("some_method_is_done", array("created"=>microtime()));
 		return true; 
 	},
