@@ -26,7 +26,17 @@ $command = array(
 	},
 	
 	"setup_db"=>function($message){
-		$db = new SQLite3("loggar.db");
+		try{
+			$db = new SQLite3(dirname(__file__) . "/db/loggar.db");
+		}
+		catch(Exception $e){
+			call("setup_db_failed", 
+				array(
+					"created"=>microtime(),
+					"message"=>$e->getMessage()
+				)
+			);
+		}
 		$sql = "CREATE TABLE IF NOT EXISTS loggar (
 				id INTEGER NOT NULL, 
 				date VARCHAR(128), 
