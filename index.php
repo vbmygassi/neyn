@@ -33,7 +33,8 @@ $commis = array(
 	"setup_loggar_db"=>function($message){
 		global $model;
 		try{
-			$model["db"] = new SQLite3(dirname(__file__) . "/db/loggar");
+			// $model["db"] = new SQLite3(dirname(__file__) . "/db/loggar");
+			$model["db"] = new SQLite3(":memory:");
 		}
 		catch(Exception $e){
 			notify("setup_loggar_db_failed", 
